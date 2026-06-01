@@ -18,6 +18,9 @@
 **本项目高度实验性，在 Ubuntu 24.04 x86_64 上进行了实验性测试。**
 
 本项目由"奇虎360"和"河南科技大学"赞助。
+
+版权所有 (c) fgfxf, qihoo360。保留所有权利。
+
 <div align="center">
     <img src="./sponsor/360.png" width="128" height="128" />
     <img src="./sponsor/haust.png" width="128" height="128" />

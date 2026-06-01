@@ -18,6 +18,8 @@ This project only resolves symbol missing issues for libc.so.6 . For symbol miss
 **This project is highly experimental and tested on Ubuntu 24.04 x86_64.**
 
 This project is sponsored by "Qihoo 360" and "Henan University of Science and Technology".
+Copyright (c) fgfxf, Qihoo360. All rights reserved.
+
 <div align="center">
     <img src="./sponsor/360.png" width="128" height="128" />
     <img src="./sponsor/haust.png" width="128" height="128" />
