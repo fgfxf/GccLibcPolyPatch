@@ -17,8 +17,7 @@ This project only resolves symbol missing issues for libc.so.6 . For symbol miss
 
 **This project is highly experimental and tested on Ubuntu 24.04 x86_64.**
 
-This project is sponsored by "Qihoo 360" and "Henan University of Science and Technology".
-Copyright (c) fgfxf, Qihoo360. All rights reserved.
+This project is sponsored by "Qihoo 360" and "Henan University of Science and Technology". Copyright (c) fgfxf, Qihoo360. All rights reserved.
 
 <div align="center">
     <img src="./sponsor/360.png" width="128" height="128" />
@@ -34,7 +33,7 @@ cat /lib/x86_64-linux-gnu/libc.so
 OUTPUT_FORMAT(elf64-x86-64)
 GROUP ( /lib/x86_64-linux-gnu/libc.so.6 /usr/lib/x86_64-linux-gnu/libc_nonshared.a  AS_NEEDED ( /lib64/ld-linux-x86-64.so.2 ) )
 
-m -D /lib/x86_64-linux-gnu/libc.so.6  | grep start_main
+nm -D /lib/x86_64-linux-gnu/libc.so.6  | grep start_main
 000000000002a200 T __libc_start_main@@GLIBC_2.34
 000000000002a200 T __libc_start_main@GLIBC_2.2.5
 nm -D /lib/x86_64-linux-gnu/libc.so.6  | grep memcpy
@@ -42,7 +41,7 @@ nm -D /lib/x86_64-linux-gnu/libc.so.6  | grep memcpy
 00000000000ba870 T memcpy@GLIBC_2.2.5
 00000000000b1720 i memcpy@@GLIBC_2.14
 ```
-
+On some older Linux systems, the nm command does not display @GLIBC, but this feature still works.
 Two @@ indicate the **default** when gcc/g++ linking. 
 This means that when gcc links elf files, it defaults to linking to __libc_start_main@@GLIBC_2.34 and memcpy@@GLIBC_2.14.
 ```bash
@@ -58,7 +57,9 @@ objdump  -T ./tool  | grep GLIBC_2.14
 
 On older systems without this symbol, the program cannot run.
 
-Copy the system's libc.so.6 and then apply a patch.  Modify the path string of **/lib/x86_64-linux-gnu/libc.so.6** in **/lib/x86_64-linux-gnu/libc.so** to the patched path, and **DO NOT** modify the system's libc.so.6 (/lib/x86_64-linux-gnu/libc.so). Otherwise, it will cause the CPU soft fault.
+Copy the system's libc.so.6 and then execute the patch program. Modify the path string of **/lib/x86_64-linux-gnu/libc.so.6** in **/lib/x86_64-linux-gnu/libc.so** to the patched path. **DO NOT** modify the system's libc.so.6 (/lib/x86_64-linux-gnu/libc.so), otherwise, it will cause the CPU soft fault.
+
+When linking ELF files with GCC later, it will default to using symbols from an older version. Copying the executable program to an older GLIBC system will still work, without the need to include the patch file.
 
 A case study is provided in the "example" folder, which involves compiling a C code on Ubuntu 24.04 and copying it to CentOS 5.11 for execution.
 
