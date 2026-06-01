@@ -14,7 +14,20 @@ Patch libc.so.6 to make gcc link to the lower version symbols by default.
 This project only resolves symbol missing issues for libc.so.6 . For symbol missing issues in C++ (libstdc++\.so), please refer to my other project.
 
 This project is highly experimental and is being tested on Ubuntu 24.04 x86_64.
+
 This project is sponsored by "Qihoo 360" and "Henan University of Science and Technology".
+<div align="center">
+    <img src="./sponsor/360.png" width="128" height="128" />
+    <span style="
+        display:inline-block;
+        width:1px;
+        height:100px;
+        background-color:#333;
+        margin:0 32px;
+        vertical-align:middle;
+    "></span>
+    <img src="./sponsor/haust.png" width="128" height="128" />
+</div>
 
 For example:
 ```bash
