@@ -68,7 +68,7 @@ make -j 4
 
 - Copy the system's libc.so.6 to build directory and then execute the patch program. 
 - Modify the path string of **/lib/x86_64-linux-gnu/libc.so.6** in **/lib/x86_64-linux-gnu/libc.so** to the patched `libc.so.6.patched` path. 
-**DO NOT** modify the system's libc.so.6 (/lib/x86_64-linux-gnu/libc.so), otherwise, it will cause the CPU soft fault. 
+**DO NOT** modify the system's libc.so.6 (/lib/x86_64-linux-gnu/libc.so.6), otherwise, it will cause the CPU soft fault. 
 - GCC compile and link
 
 > When linking ELF files with GCC later, it will default to using symbols from an older version. Copying the executable program to an older GLIBC system will still work, without the need to include the patch file.

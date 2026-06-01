@@ -68,7 +68,7 @@ make -j 4
 
 - 复制系统的libc.so.6然后执行补丁程序。
 - 将 **/lib/x86_64-linux-gnu/libc.so** 中 **/lib/x86_64-linux-gnu/libc.so.6** 的路径字符串修改为补丁后的`libc.so.6.patched`路径。
-**不要**修改系统的 libc.so.6（/lib/x86_64-linux-gnu/libc.so）。否则会导致 CPU 软故障。
+**不要**修改系统的 libc.so.6（/lib/x86_64-linux-gnu/libc.so.6）。否则会导致 CPU 软故障。
 - GCC编译ELF程序
 
  > 之后GCC链接ELF文件时，GCC将默认使用低版本的符号。复制编译产物到低版本GLIBC系统上仍可执行，无需带上补丁文件。
