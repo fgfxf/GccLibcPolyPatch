@@ -38,5 +38,9 @@ Written by Roland McGrath and Ulrich Drepper.
 ./a.out 
 Hello World from ubuntu 24.04's gcc 13.
 ```
-
+If you don't use this method, it will be:
+```bash
+./a.out 
+./a.out: /lib64/libc.so.6: version `GLIBC_2.34' not found (required by ./a.out)
+```
 
