@@ -41,9 +41,9 @@ nm -D /lib/x86_64-linux-gnu/libc.so.6  | grep memcpy
 00000000000ba870 T memcpy@GLIBC_2.2.5
 00000000000b1720 i memcpy@@GLIBC_2.14
 ```
-On some older Linux systems, the nm command does not display @GLIBC, but this feature still works.
-Two @@ indicate the **default** when gcc/g++ linking. 
-This means that when gcc links elf files, it defaults to linking to __libc_start_main@@GLIBC_2.34 and memcpy@@GLIBC_2.14.
+
+Two `@@` indicate the **default** when gcc/g++ linking. 
+This means that when GCC links ELF files, it defaults to linking to `__libc_start_main@@GLIBC_2.34` and `memcpy@@GLIBC_2.14`. On some older Linux systems, the nm command does not display @GLIBC, but this feature still works.
 ```bash
 /lib64/libc.so.6: version `GLIBC_2.14' not found
 /lib64/libc.so.6: version `GLIBC_2.38' not found
@@ -57,9 +57,36 @@ objdump  -T ./tool  | grep GLIBC_2.14
 
 On older systems without this symbol, the program cannot run.
 
-Copy the system's libc.so.6 and then execute the patch program. Modify the path string of **/lib/x86_64-linux-gnu/libc.so.6** in **/lib/x86_64-linux-gnu/libc.so** to the patched path. **DO NOT** modify the system's libc.so.6 (/lib/x86_64-linux-gnu/libc.so), otherwise, it will cause the CPU soft fault.
+```bash
+git clone --recursive https://github.com/fgfxf/GccLibcPolyPatch.git
+cd GccLibcPolyPatch
+mkdir build
+cd build
+cmake ..
+make -j 4
+```
 
-When linking ELF files with GCC later, it will default to using symbols from an older version. Copying the executable program to an older GLIBC system will still work, without the need to include the patch file.
+- Copy the system's libc.so.6 to build directory and then execute the patch program. 
+- Modify the path string of **/lib/x86_64-linux-gnu/libc.so.6** in **/lib/x86_64-linux-gnu/libc.so** to the patched `libc.so.6.patched` path. 
+**DO NOT** modify the system's libc.so.6 (/lib/x86_64-linux-gnu/libc.so), otherwise, it will cause the CPU soft fault. 
+- GCC compile and link
+
+> When linking ELF files with GCC later, it will default to using symbols from an older version. Copying the executable program to an older GLIBC system will still work, without the need to include the patch file.
+
+```bash
+nm -D libc.so.6.patched
+...
+00000000000ba870 T memcpy@@GLIBC_2.2.5
+00000000000b1720 i memcpy@GLIBC_2.14
+000000000002a200 T __libc_start_main@GLIBC_2.34
+000000000002a200 T __libc_start_main@@GLIBC_2.2.5
+...
+
+gcc test.cpp  libc.so.6.patched
+
+nm a.out  | grep start_main
+                 U __libc_start_main@GLIBC_2.2.5
+```
 
 A case study is provided in the "example" folder, which involves compiling a C code on Ubuntu 24.04 and copying it to CentOS 5.11 for execution.
 

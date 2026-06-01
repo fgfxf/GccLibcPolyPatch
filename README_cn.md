@@ -42,8 +42,8 @@ nm -D /lib/x86_64-linux-gnu/libc.so.6  | grep memcpy
 00000000000b1720 i memcpy@@GLIBC_2.14
 ```
 
-两个 @@ 表示 gcc/g++ 链接时的**默认**符号。
-这意味着当 gcc 链接 elf 文件时，默认会链接到 __libc_start_main@@GLIBC_2.34 和 memcpy@@GLIBC_2.14。有的旧linux系统nm命令不显示@GLIBC，但是这一特性仍然有效。
+两个 `@@` 表示 gcc/g++ 链接时的**默认**符号。
+这意味着当GCC链接 ELF 文件时，默认会链接到 `__libc_start_main@@GLIBC_2.34` 和 `memcpy@@GLIBC_2.14`。有的旧linux系统nm命令不显示`@GLIBC`，但是这一特性仍然有效。
 ```bash
 /lib64/libc.so.6: version `GLIBC_2.14' not found
 /lib64/libc.so.6: version `GLIBC_2.38' not found
@@ -57,9 +57,37 @@ objdump  -T ./tool  | grep GLIBC_2.14
 
 在没有这些符号的旧系统上，程序无法运行。
 
-复制系统的libc.so.6然后执行补丁程序。将 **/lib/x86_64-linux-gnu/libc.so** 中 **/lib/x86_64-linux-gnu/libc.so.6** 的路径字符串修改为补丁后的路径。**不要**修改系统的 libc.so.6（/lib/x86_64-linux-gnu/libc.so）。否则会导致 CPU 软故障。
+```bash
+git clone --recursive https://github.com/fgfxf/GccLibcPolyPatch.git
+cd GccLibcPolyPatch
+mkdir build
+cd build
+cmake ..
+make -j 4
+```
 
-之后GCC链接ELF文件时，将默认使用低版本的符号。复制可执行程序到低版本GLIBC系统上仍可执行，无需带上补丁文件。
+- 复制系统的libc.so.6然后执行补丁程序。
+- 将 **/lib/x86_64-linux-gnu/libc.so** 中 **/lib/x86_64-linux-gnu/libc.so.6** 的路径字符串修改为补丁后的`libc.so.6.patched`路径。
+**不要**修改系统的 libc.so.6（/lib/x86_64-linux-gnu/libc.so）。否则会导致 CPU 软故障。
+- GCC编译ELF程序
+
+ > 之后GCC链接ELF文件时，GCC将默认使用低版本的符号。复制编译产物到低版本GLIBC系统上仍可执行，无需带上补丁文件。
+
+```bash
+nm -D libc.so.6.patched
+...
+00000000000ba870 T memcpy@@GLIBC_2.2.5
+00000000000b1720 i memcpy@GLIBC_2.14
+000000000002a200 T __libc_start_main@GLIBC_2.34
+000000000002a200 T __libc_start_main@@GLIBC_2.2.5
+...
+
+gcc test.cpp  libc.so.6.patched
+
+nm a.out  | grep start_main
+                 U __libc_start_main@GLIBC_2.2.5
+```
+
 
 example文件夹里给出了一个案例，在ubuntu24.04上编译一个c代码，并复制到了centos5.11中运行。
 
