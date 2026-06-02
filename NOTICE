@@ -1,0 +1,9 @@
+This project uses ELFIO.
+
+ELFIO:
+  Project: https://github.com/serge1/ELFIO
+  License: MIT License
+  Copyright: Copyright (C) Serge Lamikhov-Center
+
+The ELFIO source files are distributed under the MIT License.
+See third_party/ELFIO/LICENSE for details.

@@ -17,8 +17,24 @@
  *              该工具用于将 libc.so.6（或其他 ELF 共享库）中具有多个版本的符号的
  *              默认链接版本从新版本降级到最旧的版本。
  */
+std::string LOGO=R"(GccLibcPolyPatch 
+https://github.com/fgfxf/GccLibcPolyPatch
+This tool is used to downgrade the default link version of symbols with multiple versions in libc.so.6 from the new version to the oldest version, for compatibility with GCC compilation.
+Please do not directly modify the system so.6 file, but instead modify the .so script file.
+Copyright (c) fgfxf, qihoo360. All rights reserved.
 
+该工具用于将 libc.so.6中具有多个版本的符号的默认链接版本从新版本降级到最旧的版本，用于GCC编译兼容。
+请不要直接修改系统so.6文件，而是修改.so脚本文件。
+版权所有 (c) fgfxf, qihoo360。保留所有权利。
+
+This project uses ELFIO.
+ELFIO:
+  Project: https://github.com/serge1/ELFIO
+  License: MIT License
+  Copyright: Copyright (C) Serge Lamikhov-Center
+)";
 int main(int argc, char** argv) {
+    std::cout<<LOGO<<std::endl;
     if (argc < 2) {
         std::cerr << "usage: " << argv[0] << " <libc.so.6> [output.so]" << std::endl;
         return -1;
